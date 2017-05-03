@@ -2,10 +2,8 @@ var React = require('react');
 var PropTypes = require('prop-types');
 var api = require('../utils/api');
 
-// Stateless Functional Component - no states
-function SelectLanguage(props) {
+function SelectLanguage (props) {
   var languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python'];
-
   return (
     <ul className='languages'>
       {languages.map(function (lang) {
@@ -48,7 +46,6 @@ function RepoGrid (props) {
   )
 }
 
-
 RepoGrid.propTypes = {
   repos: PropTypes.array.isRequired,
 }
@@ -58,23 +55,19 @@ SelectLanguage.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
-// lifecycle event
-
 class Popular extends React.Component {
   constructor(props) {
     super();
     this.state = {
       selectedLanguage: 'All',
-      repos: null
+      repos: null,
     };
 
     this.updateLanguage = this.updateLanguage.bind(this);
   }
-
-  componentDidMount () {
-    this.updateLanguage(this.state.selectedLanguage);
+  componentDidMount() {
+    this.updateLanguage(this.state.selectedLanguage)
   }
-
   updateLanguage(lang) {
     this.setState(function () {
       return {
@@ -84,27 +77,24 @@ class Popular extends React.Component {
     });
 
     api.fetchPopularRepos(lang)
-      .then(function(repos){
-        this.setState(function() {
+      .then(function (repos) {
+        this.setState(function () {
           return {
             repos: repos
           }
-        })
+        });
       }.bind(this));
   }
   render() {
-
     return (
       <div>
         <SelectLanguage
-        selectedLanguage={this.state.selectedLanguage}
-        onSelect={this.updateLanguage}
-        />
+          selectedLanguage={this.state.selectedLanguage}
+          onSelect={this.updateLanguage} />
         {!this.state.repos
-          ? <p>LOADING</p>
+          ? <p>LOADING!</p>
           : <RepoGrid repos={this.state.repos} />}
       </div>
-
     )
   }
 }
